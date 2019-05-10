@@ -31,6 +31,7 @@ namespace aws {
       class SendMessageResponse;
       class ReceiveMessageResponse;
       class DeleteMessageResponse;
+      class GetQueueAttributesResponse;
   } /* namespace sqs */
 
   template <class T>
@@ -109,6 +110,21 @@ namespace aws {
       
       SendMessageResponse(sqs::SendMessageResponse*);
   };
+  
+  class GetQueueAttributesResponse : public SQSResponse<sqs::GetQueueAttributesResponse> 
+  {
+    public:
+      ~GetQueueAttributesResponse() {}
+      int getNumberOfMessages();
+      int getNumberOfNotVisibleMessages();
+      time_t getLastModifiedTime();
+      time_t getCreateTime();
+      int getMessageRetentionPeriod();
+
+    protected:
+      friend class SQSConnectionImpl;
+      GetQueueAttributesResponse(sqs::GetQueueAttributesResponse*);
+  };
 
   class ReceiveMessageResponse : public SQSResponse<sqs::ReceiveMessageResponse>
   {
@@ -123,6 +139,7 @@ namespace aws {
         std::string message_id;
         uint64_t    meta_data;
         std::string receipt_handle;
+        uint64_t    approximate_count;
       };
 
       void

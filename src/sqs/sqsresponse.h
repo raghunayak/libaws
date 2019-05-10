@@ -72,9 +72,31 @@ namespace aws {
         getMD5OfMessageBody() const;
 
       protected:
-        friend class SendMessageHandler;;
+        friend class SendMessageHandler;
         std::string theMessageId;
         std::string theMD5OfMessageBody;
+    };
+
+    class GetQueueAttributesResponse : public QueryResponse
+    {
+      public:
+        GetQueueAttributesResponse() : approximateNumberOfMessages(0),
+            approximateNumberOfMessagesNotVisible(0)
+        {}
+
+        int getNumberOfMessages() {return approximateNumberOfMessages;}
+        int getNumberOfNotVisibleMessages() {return approximateNumberOfMessagesNotVisible;}
+        time_t getLastModifiedTime() {return lastModifiedTime;}
+        time_t getCreateTime() {return createTime;}
+        int getMessageRetentionPeriod() {return messageRetentionPeriod;}
+
+      protected:
+        friend class GetQueueAttributesHandler;
+        int approximateNumberOfMessages;
+        int approximateNumberOfMessagesNotVisible;
+        time_t lastModifiedTime;
+        time_t createTime;
+        int messageRetentionPeriod;
     };
 
     class ReceiveMessageResponse : public QueryResponse
@@ -88,6 +110,7 @@ namespace aws {
           std::string message_id;
           uint64_t    meta_data;
           std::string receipt_handle;
+          uint64_t    approximate_count;
         };
 
         ~ReceiveMessageResponse();

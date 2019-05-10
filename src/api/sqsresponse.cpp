@@ -67,6 +67,38 @@ namespace aws {
   DeleteQueueResponse::DeleteQueueResponse(sqs::DeleteQueueResponse* r)
     : SQSResponse<sqs::DeleteQueueResponse>(r) {}
 
+  GetQueueAttributesResponse::GetQueueAttributesResponse(sqs::GetQueueAttributesResponse* r)
+    : SQSResponse<sqs::GetQueueAttributesResponse>(r) {}
+
+  int
+  GetQueueAttributesResponse::getNumberOfMessages()
+  {
+    return theSQSResponse->getNumberOfMessages();
+  }
+
+  int
+  GetQueueAttributesResponse::getNumberOfNotVisibleMessages()
+  {
+    return theSQSResponse->getNumberOfNotVisibleMessages();
+  }
+
+  time_t
+  GetQueueAttributesResponse::getLastModifiedTime()
+  {
+    return theSQSResponse->getLastModifiedTime();
+  }
+
+  time_t
+  GetQueueAttributesResponse::getCreateTime()
+  {
+    return theSQSResponse->getCreateTime();
+  }
+  int
+  GetQueueAttributesResponse::getMessageRetentionPeriod()
+  {
+    return theSQSResponse->getMessageRetentionPeriod();
+  }
+
   /**
    * ListQueuesResponse
    */

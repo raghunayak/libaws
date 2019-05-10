@@ -27,6 +27,7 @@ namespace aws {
     class SendMessageResponse;
     class ReceiveMessageResponse;
     class DeleteMessageResponse;
+    class GetQueueAttributesResponse;
 
     class QueueErrorHandler : public SimpleQueryCallBack{
       
@@ -42,7 +43,10 @@ namespace aws {
           MD5OfMessageBody 	= 64,
           ReceiptHandle			= 128,
           Body							= 256,
-          MetaData          = 512
+          MetaData          = 512,
+          Attribute         = 1024,  // magiczhao add
+          AttributeName     = 2048,  // magiczhao add
+          AttributeValue    = 4096   // magiczhao add
         };
 
         virtual void startElement ( const xmlChar *  localname, int nb_attributes, const xmlChar ** attributes );
@@ -66,6 +70,19 @@ namespace aws {
         virtual void responseCharacters ( const xmlChar *  value, int len );
         virtual void responseEndElement ( const xmlChar *  localname );
 
+    };
+    
+    class GetQueueAttributesHandler: public QueueErrorHandler
+    {
+      protected:
+        friend class SQSConnection;
+        GetQueueAttributesResponse* theGetQueueAttributesResponse;
+        std::string currAttributeName;
+
+      public:
+        virtual void responseStartElement ( const xmlChar *  localname, int nb_attributes, const xmlChar ** attributes );
+        virtual void responseCharacters ( const xmlChar *  value, int len );
+        virtual void responseEndElement ( const xmlChar *  localname );
     };
 
     class DeleteQueueHandler : public QueueErrorHandler
@@ -112,6 +129,7 @@ namespace aws {
       private:
         std::string theBody;
         bool theDecode;
+        std::string currentAttributeName;
       protected:
         friend class SQSConnection;
         ReceiveMessageResponse* theReceiveMessageResponse;
